@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sambhav Tuteja | Creative Video Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus+Jakarta+Sans', sans-serif;
+            background-color: #050505;
+            overflow-x: hidden;
+        }
+
+        /* --- Global Animation System --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Specific Entrance */
+        @keyframes heroFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-hero {
+            animation: heroFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Stagger Delays */
+        .stagger-1 {
+            transition-delay: 0.1s;
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            transition-delay: 0.2s;
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            transition-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            transition-delay: 0.4s;
+            animation-delay: 0.4s;
+        }
+
+        /* Highlight Animation for Contact */
+        @keyframes highlightPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+                color: #fff;
+                text-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .contact-highlight {
+            animation: highlightPop 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Aspect Ratios */
+        .video-container-vertical {
+            position: relative;
+            padding-bottom: 177.77%;
+            height: 0;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .video-container-landscape {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .video-container-vertical img,
+        .video-container-landscape img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .group:hover .video-container-vertical img,
+        .group:hover .video-container-landscape img {
+            transform: scale(1.08);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #a1a1a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .folder-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+        }
+
+        .folder-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .group:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .main-category-tab {
+            transition: all 0.3s ease;
+        }
+
+        .main-category-tab.active {
+            background: white;
+            color: black;
+        }
+
+        .cv-grid-item {
+            border-left: 2px solid rgba(99, 102, 241, 0.3);
+            padding-left: 1rem;
+        }
+
+        /* View transitions for folder opening */
+        .view-transition {
+            animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+    </style>
+</head>
+
+<body class="text-zinc-300 antialiased">
+
+    <!-- Navigation -->
+    <nav
+        class="fixed top-0 w-full z-50 glass py-3 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
+        <div class="text-white font-black text-xl tracking-tighter uppercase">
+            SAMBHAV TUTEJA
+        </div>
+        <div class="hidden md:flex gap-6 text-[13px] font-medium">
+            <a href="#about" class="hover:text-white transition-colors">Resume</a>
+            <a href="#portfolio" class="hover:text-white transition-colors">Work</a>
+            <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+        </div>
+        <button onclick="scrollToContact()"
+            class="bg-white text-black px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all transform hover:scale-105">Hire
+            Me</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+        class="min-h-[85vh] flex flex-col items-center justify-center px-6 pt-32 text-center relative overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-900/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-900/10 blur-[120px] rounded-full">
+        </div>
+
+        <h1
+            class="opacity-0 animate-hero text-5xl md:text-8xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+            VIDEO EDITOR <br />
+            <span class="text-gradient">& MOTION DESIGNER</span>
+        </h1>
+
+        <p class="opacity-0 animate-hero stagger-1 text-zinc-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+            Transforming raw footage into high-impact visual stories that command attention.
+        </p>
+
+        <div class="opacity-0 animate-hero stagger-2 flex flex-col sm:flex-row gap-4">
+            <a href="#portfolio"
+                class="bg-white text-black px-8 py-3 rounded-full text-sm font-bold hover:scale-105 transition-transform tracking-tight shadow-lg shadow-white/5">
+                Explore Work
+            </a>
+            <a href="https://drive.google.com/file/d/15Y7_H4UyoAxmO26S2-3o31cEuTBtMeeE/view?usp=drive_link"
+                target="_blank"
+                class="glass text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-white/10 transition-colors tracking-tight">
+                Download CV
+            </a>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="about" class="py-24 px-6 md:px-12 max-w-6xl mx-auto">
+        <h2 class="reveal text-white text-xs font-black tracking-[0.4em] uppercase mb-12 text-center opacity-40">Profile
+            & Experience</h2>
+        <div class="reveal glass p-8 md:p-12 rounded-[2rem] border border-white/5">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <div class="space-y-6 reveal stagger-1">
+                    <div>
+                        <h2 class="text-white text-2xl font-extrabold mb-3">Sambhav Tuteja</h2>
+                        <p class="text-indigo-400 font-bold tracking-widest uppercase text-[11px] mb-4">Visual
+                            Storyteller</p>
+                        <p class="text-zinc-400 text-sm leading-relaxed">Crafting high-retention content and impactful
+                            motion graphics with over a year of professional experience.</p>
+                    </div>
+                </div>
+                <div class="space-y-10 reveal stagger-2">
+                    <div class="cv-grid-item">
+                        <h3 class="text-indigo-400 font-bold uppercase tracking-widest text-[10px] mb-4">Core Skills
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="bg-white/5 px-2.5 py-1 rounded-md text-[12px] hover:bg-white/10 transition-colors">After
+                                Effects</span>
+                            <span
+                                class="bg-white/5 px-2.5 py-1 rounded-md text-[12px] hover:bg-white/10 transition-colors">Premiere
+                                Pro</span>
+                            <span
+                                class="bg-white/5 px-2.5 py-1 rounded-md text-[12px] hover:bg-white/10 transition-colors">Photoshop</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-8 reveal stagger-3">
+                    <div class="cv-grid-item">
+                        <h3 class="text-indigo-400 font-bold uppercase tracking-widest text-[10px] mb-4">Experience</h3>
+                        <p class="text-white font-bold text-sm">Growumedia (2025-2026)</p>
+                        <p class="text-indigo-300 text-xs">Video Editor (Intern)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 px-6 md:px-12 bg-zinc-950 border-t border-zinc-900">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- Category Toggle -->
+            <div class="reveal flex justify-center mb-16">
+                <div class="glass p-1.5 rounded-full flex gap-1">
+                    <button onclick="switchMainCategory('shortform')" id="cat-shortform"
+                        class="main-category-tab active px-8 py-2.5 rounded-full text-[12px] font-bold uppercase tracking-widest">
+                        Shortform
+                    </button>
+                    <button onclick="switchMainCategory('longform')" id="cat-longform"
+                        class="main-category-tab px-8 py-2.5 rounded-full text-[12px] font-bold uppercase tracking-widest">
+                        Longform
+                    </button>
+                </div>
+            </div>
+
+            <!-- SHORTFORM SECTION -->
+            <div id="section-shortform" class="category-section">
+
+                <div id="shortform-subfolders">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div onclick="openVideoView('client')"
+                            class="reveal stagger-1 folder-card p-10 rounded-[2.5rem] flex flex-col items-center text-center group">
+                            <div
+                                class="mb-6 p-6 bg-indigo-500/10 rounded-3xl group-hover:bg-indigo-500/20 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-bold text-2xl mb-2">Client Work</h3>
+                            <p class="text-zinc-500">YouTube Shorts Collection</p>
+                        </div>
+                        <div onclick="openVideoView('motion')"
+                            class="reveal stagger-2 folder-card p-10 rounded-[2.5rem] flex flex-col items-center text-center group">
+                            <div
+                                class="mb-6 p-6 bg-purple-500/10 rounded-3xl group-hover:bg-purple-500/20 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                                    fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-bold text-2xl mb-2">Motion Graphics</h3>
+                            <p class="text-zinc-500">Google Drive Reels Collection</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: CLIENT VIDEOS (YouTube) -->
+                <div id="view-client" class="hidden">
+                    <button onclick="backToFolders()"
+                        class="reveal mb-10 flex items-center gap-2 text-zinc-500 hover:text-white transition-colors font-bold uppercase text-xs tracking-widest mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m15 18-6-6 6-6" />
+                        </svg>
+                        Back to Folders
+                    </button>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                        <div class="reveal stagger-1 group cursor-pointer">
+                            <a href="https://youtube.com/shorts/19kRf6mlXRI" target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-indigo-500/50 transition-all">
+                                    <img src="https://img.youtube.com/vi/19kRf6mlXRI/maxresdefault.jpg" alt="Work">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Client
+                                    Work 01</h4>
+                            </a>
+                        </div>
+                        <div class="reveal stagger-2 group cursor-pointer">
+                            <a href="https://youtube.com/shorts/hLO5CoGViKM" target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-indigo-500/50 transition-all">
+                                    <img src="https://img.youtube.com/vi/hLO5CoGViKM/maxresdefault.jpg" alt="Work">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Client
+                                    Work 02</h4>
+                            </a>
+                        </div>
+                        <div class="reveal stagger-3 group cursor-pointer">
+                            <a href="https://youtube.com/shorts/4i0Zlz-j5Bk" target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-indigo-500/50 transition-all">
+                                    <img src="https://img.youtube.com/vi/4i0Zlz-j5Bk/maxresdefault.jpg" alt="Work">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Client
+                                    Work 03</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: MOTION VIDEOS -->
+                <div id="view-motion" class="hidden">
+                    <button onclick="backToFolders()"
+                        class="reveal mb-10 flex items-center gap-2 text-zinc-500 hover:text-white transition-colors font-bold uppercase text-xs tracking-widest mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m15 18-6-6 6-6" />
+                        </svg>
+                        Back to Folders
+                    </button>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+                        <!-- REEL 1 -->
+                        <div class="reveal stagger-1 group cursor-pointer">
+                            <a href="https://drive.google.com/file/d/1Eft-tzsLMnKD3Wd2gTcNqAc2UksOyTCx/view"
+                                target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-purple-500/50 transition-all">
+                                    <img src="https://lh3.googleusercontent.com/d/1boupdjSmbIE0dz_xSnF0sL513OzK0cRY"
+                                        alt="Video 01 Thumbnail">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Video 01
+                                </h4>
+                            </a>
+                        </div>
+
+                        <!-- REEL 2 -->
+                        <div class="reveal stagger-2 group cursor-pointer">
+                            <a href="https://drive.google.com/file/d/1VD9gDg6FhduumaMF57wQWLypZrtqQB2r/view"
+                                target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-purple-500/50 transition-all">
+                                    <img src="https://lh3.googleusercontent.com/d/1BN6K4BCuB6S3wiOLDnG27o7GZeqK3ITr"
+                                        alt="Video 02 Thumbnail">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Video 02
+                                </h4>
+                            </a>
+                        </div>
+
+                        <!-- REEL 3 -->
+                        <div class="reveal stagger-3 group cursor-pointer">
+                            <a href="https://drive.google.com/file/d/1QTma3BkV15UavKQhvVbrbB2JheBExSU5/view"
+                                target="_blank">
+                                <div
+                                    class="video-container-vertical rounded-3xl overflow-hidden mb-3 border border-white/5 group-hover:border-purple-500/50 transition-all">
+                                    <img src="https://lh3.googleusercontent.com/d/1Fd-cb9UbA4IK6qS2FQedLr-Sf46OYzJ_"
+                                        alt="Video 03 Thumbnail">
+                                    <div class="play-overlay">
+                                        <div
+                                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg">
+                                            <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-white font-bold text-center text-sm uppercase tracking-tight">Video 03
+                                </h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LONGFORM SECTION -->
+            <div id="section-longform" class="category-section hidden">
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <div class="reveal stagger-1 group cursor-pointer">
+                        <a href="https://youtu.be/HpmL44pYZSg" target="_blank">
+                            <div
+                                class="video-container-landscape rounded-3xl overflow-hidden mb-4 border border-white/5 group-hover:border-white/20 transition-all">
+                                <img src="https://img.youtube.com/vi/HpmL44pYZSg/maxresdefault.jpg" alt="Longform">
+                                <div class="play-overlay">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black shadow-xl">
+                                        <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="text-white font-bold text-lg uppercase tracking-tight">YouTube Documentary</h3>
+                        </a>
+                    </div>
+                    <div class="reveal stagger-2 group cursor-pointer">
+                        <a href="https://youtu.be/DnjZImokSDg" target="_blank">
+                            <div
+                                class="video-container-landscape rounded-3xl overflow-hidden mb-4 border border-white/5 group-hover:border-white/20 transition-all">
+                                <img src="https://img.youtube.com/vi/DnjZImokSDg/maxresdefault.jpg" alt="Longform">
+                                <div class="play-overlay">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black shadow-xl">
+                                        <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="text-white font-bold text-lg uppercase tracking-tight">Visual Storytelling</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact" class="py-24 px-6 md:px-12 bg-black border-t border-zinc-900 text-center">
+        <div class="reveal">
+            <h2 class="reveal stagger-1 text-3xl font-extrabold text-white mb-6 uppercase tracking-tighter">LET'S
+                CONNECT</h2>
+            <div class="flex flex-col gap-2 mb-10">
+                <p id="contact-email"
+                    class="reveal stagger-2 text-indigo-400 font-bold text-xl md:text-2xl underline decoration-indigo-500/30 transition-all duration-500 inline-block">
+                    sambhavtuteja@gmail.com</p>
+                <p id="contact-phone"
+                    class="reveal stagger-3 text-white text-lg md:text-xl transition-all duration-500 inline-block tracking-tight">
+                    +91 6283003392</p>
+            </div>
+            <p class="reveal stagger-4 text-[10px] uppercase tracking-[0.3em] text-zinc-700">© 2026 Sambhav Tuteja •
+                Ludhiana, India</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal Intersection Observer
+        function initReveal() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // To prevent repeated firing, we could unobserve if we want it once
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Hire Me Logic
+        function scrollToContact() {
+            const contactSection = document.getElementById('contact');
+            const emailEl = document.getElementById('contact-email');
+            const phoneEl = document.getElementById('contact-phone');
+
+            // 1. Remove classes immediately in case they were still there from a previous click
+            emailEl.classList.remove('contact-highlight');
+            phoneEl.classList.remove('contact-highlight');
+
+            // 2. Trigger scroll
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+
+            // 3. Highlight IMMEDIATELY (no setTimeout delay)
+            emailEl.classList.add('contact-highlight');
+            phoneEl.classList.add('contact-highlight');
+
+            // 4. Remove highlight after a brief moment so it can be re-triggered
+            setTimeout(() => {
+                emailEl.classList.remove('contact-highlight');
+                phoneEl.classList.remove('contact-highlight');
+            }, 1500);
+        }
+
+        function switchMainCategory(cat) {
+            document.querySelectorAll('.category-section').forEach(el => el.classList.add('hidden'));
+            const targetSection = document.getElementById('section-' + cat);
+            targetSection.classList.remove('hidden');
+
+            // Re-trigger reveal for new content inside the section
+            targetSection.querySelectorAll('.reveal').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            setTimeout(() => initReveal(), 50);
+
+            document.querySelectorAll('.main-category-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('cat-' + cat).classList.add('active');
+
+            if (cat === 'shortform') {
+                backToFolders();
+            }
+        }
+
+        function openVideoView(folderId) {
+            document.getElementById('shortform-subfolders').classList.add('hidden');
+            const targetView = document.getElementById('view-' + folderId);
+            targetView.classList.remove('hidden');
+
+            // Re-trigger reveal for new content in folder view
+            targetView.querySelectorAll('.reveal').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            setTimeout(() => initReveal(), 50);
+
+            window.scrollTo({
+                top: document.getElementById('portfolio').offsetTop - 50,
+                behavior: 'smooth'
+            });
+        }
+
+        function backToFolders() {
+            document.getElementById('shortform-subfolders').classList.remove('hidden');
+            document.getElementById('view-client').classList.add('hidden');
+            document.getElementById('view-motion').classList.add('hidden');
+
+            document.getElementById('shortform-subfolders').querySelectorAll('.reveal').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            setTimeout(() => initReveal(), 50);
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initReveal();
+        });
+    </script>
+
+</body>
+
+</html>
